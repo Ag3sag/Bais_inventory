@@ -9,29 +9,41 @@ include 'conexion.php';
 
 $mensaje = "";
 
+// CREAR USUARIO
 if (isset($_POST['crear_usuario'])) {
     $clave = $_POST['clave'];
     $contrasena = $_POST['contrasena'];
     $rol = $_POST['rol'];
 
     $hashed = md5($contrasena);
-    mysqli_query($conexion, "INSERT INTO usuario (clave_acceso, contraseña, rol) VALUES ('$clave', '$hashed', '$rol')");
 
-    $_SESSION['mensaje'] = "✅ Usuario creado correctamente.";
+    $query = "INSERT INTO usuario (clave_acceso, contrasena, rol) VALUES ('$clave', '$hashed', '$rol')";
+    if (mysqli_query($conexion, $query)) {
+        $_SESSION['mensaje'] = "✅ Usuario creado correctamente.";
+    } else {
+        $_SESSION['mensaje'] = "❌ Error al crear usuario: " . mysqli_error($conexion);
+    }
     header("Location: admin_usuarios.php");
     exit();
 }
 
+// ELIMINAR USUARIO
 if (isset($_POST['eliminar_usuario'])) {
     $id_usuario = $_POST['eliminar_usuario'];
-    mysqli_query($conexion, "DELETE FROM usuario WHERE id_usuario = $id_usuario");
-    $_SESSION['mensaje'] = "🗑 Usuario eliminado.";
+    $query = "DELETE FROM usuario WHERE id_usuario = $id_usuario";
+    if (mysqli_query($conexion, $query)) {
+        $_SESSION['mensaje'] = "🗑 Usuario eliminado.";
+    } else {
+        $_SESSION['mensaje'] = "❌ Error al eliminar: " . mysqli_error($conexion);
+    }
     header("Location: admin_usuarios.php");
     exit();
 }
 
+// CONSULTAR USUARIOS
 $usuarios = mysqli_query($conexion, "SELECT * FROM usuario");
 
+// MENSAJE DE SESIÓN
 if (isset($_SESSION['mensaje'])) {
     $mensaje = $_SESSION['mensaje'];
     unset($_SESSION['mensaje']);
@@ -132,7 +144,7 @@ if (isset($_SESSION['mensaje'])) {
     }
 
     table button:hover {
-      background-color: #3b82f6;
+      background-color: #1d4ed8;
     }
 
     .volver {

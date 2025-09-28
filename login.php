@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($resultado->num_rows === 1) {
         $usuario = $resultado->fetch_assoc();
 
-        if (md5($contrasena) === $usuario['contraseña']) {
+        if (md5($contrasena) === $usuario['contrasena']) {
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
             $_SESSION['rol'] = $usuario['rol'];
             $_SESSION['clave_acceso'] = $usuario['clave_acceso'];
